@@ -43,10 +43,12 @@ It runs one replica, and stops the old pod before starting the new one, since tw
 The chart sets these as environment variables, which override `config.xml`, so they can't be changed in the web UI:
 
 - The API key, from `apiKey`'s Secret.
-- The authentication method, `Forms`.
 - Authentication required, `Enabled`.
   Behind a gateway or ingress every request comes from a private address, so `DisabledForLocalAddresses` would turn the login off for everyone.
 - The Postgres connection, from `postgres`.
+
+The authentication method is left to Sonarr's first-run screen, which also creates the user.
+Setting it here would skip that screen, and Sonarr has no setting for the user.
 
 ## Requirements
 
