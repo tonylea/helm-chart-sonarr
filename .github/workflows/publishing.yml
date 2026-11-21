@@ -10,7 +10,7 @@ on:
 
 jobs:
   publish:
-    uses: tonylea/ci-templates/.github/workflows/versioning-helm.yml@v1.3.3
+    uses: tonylea/ci-templates/.github/workflows/versioning-helm.yml@v1.3.4
     permissions:
       contents: write
       pages: write
