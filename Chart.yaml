@@ -2,7 +2,7 @@ apiVersion: v2
 name: sonarr
 description: Deploys Sonarr, which finds, downloads and organises TV series
 type: application
-version: 1.0.0
+version: 2.0.0
 appVersion: "4.0.20.3014-ls6"
 home: https://github.com/tonylea/helm-chart-sonarr
 sources:

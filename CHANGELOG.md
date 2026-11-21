@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.0.0](https://github.com/tonylea/helm-chart-sonarr/compare/v1.0.0...v2.0.0) (2026-11-21)
+
+### ⚠ BREAKING CHANGES
+
+* postgres.database is now postgres.databases.main,
+  and Sonarr needs a log database, postgres.databases.log.
+
+### Features
+
+* keep Sonarr's log in its own Postgres database ([9b25b2a](https://github.com/tonylea/helm-chart-sonarr/commit/9b25b2ad17db92a407b0ecc0caafef34dbabe2b0))
+
+### Bug Fixes
+
+* leave resource requests to whoever deploys the chart ([15c1dfb](https://github.com/tonylea/helm-chart-sonarr/commit/15c1dfb3c25670614074d8a003312639a250da6f))
+
+### Documentation
+
+* keep only the comments that record a decision ([7ec98c7](https://github.com/tonylea/helm-chart-sonarr/commit/7ec98c7c38c5632494eb3f340112ed2302ec1851))
+* keep the README to the fixed settings and what the chart needs ([102e38c](https://github.com/tonylea/helm-chart-sonarr/commit/102e38c221dfd7bba7b4efbf047070547cfd03b9))
+* link the Servarr wiki for how to lay out /data ([314cd74](https://github.com/tonylea/helm-chart-sonarr/commit/314cd744e237c09a0ecad2ae855aade29488cfda))
+
 ## 1.0.0 (2026-11-21)
 
 ### Features
