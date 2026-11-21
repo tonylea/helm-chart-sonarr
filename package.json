@@ -1,6 +1,6 @@
 {
   "name": "helm-chart-sonarr",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Deploys Sonarr, which finds, downloads and organises TV series",
   "private": true,
   "repository": {

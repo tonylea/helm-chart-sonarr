@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.0](https://github.com/tonylea/helm-chart-sonarr/compare/v2.0.0...v3.0.0) (2026-11-21)
+
+### ⚠ BREAKING CHANGES
+
+* persistence.data is now a list of named mounts, each at
+  /data/<name>, with at least one required.
+
+### Features
+
+* mount each data volume at /data/<name> ([1bb35c8](https://github.com/tonylea/helm-chart-sonarr/commit/1bb35c8632619132b3571fac65d3b139d0ad014d))
+
+### Documentation
+
+* show the chart's download count ([b10f63b](https://github.com/tonylea/helm-chart-sonarr/commit/b10f63bd19f686c7859c83c97b936736ff71a6d5))
+
 ## [2.0.0](https://github.com/tonylea/helm-chart-sonarr/compare/v1.0.0...v2.0.0) (2026-11-21)
 
 ### ⚠ BREAKING CHANGES
