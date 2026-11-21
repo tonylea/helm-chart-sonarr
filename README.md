@@ -1,16 +1,9 @@
 # Sonarr Helm Chart
 
 Deploys [Sonarr](https://sonarr.tv/) from LinuxServer's image, [`lscr.io/linuxserver/sonarr`](https://github.com/linuxserver/docker-sonarr), the one Sonarr's docs recommend.
-Sonarr watches for new episodes of the series it's given, sends them to a download client, and imports and renames them into the library.
 
 The chart is opinionated: Sonarr keeps its data in Postgres, uses a fixed API key, and always asks for a login.
-It runs one replica:
-
-- A Deployment that stops the old pod before starting the new one, since two copies of Sonarr can't share one database.
-- A volume for `/config` (`config.xml`, logs, backups and the artwork cache) and one for `/data` (the library and the download folders), each an existing claim or a claim the chart creates.
-- A Service on Sonarr's port, 8989, and an optional Gateway API `HTTPRoute` to it.
-- A start-up, liveness and readiness probe on `/ping`, which needs no login.
-  Start-up gets 5 minutes, since the first start creates Sonarr's schema in Postgres.
+It runs one replica, and stops the old pod before starting the new one, since two copies of Sonarr can't share a database.
 
 ## Values
 
@@ -24,12 +17,13 @@ It runs one replica:
 | `apiKey.secretKeyRef.key` | `api-key` |
 | `postgres.host` | none; required |
 | `postgres.port` | `5432` |
-| `postgres.database` | `sonarr-main` |
+| `postgres.databases.main` | `sonarr-main` |
+| `postgres.databases.log` | `sonarr-log` |
 | `postgres.username.secretKeyRef.name` | none; required |
 | `postgres.username.secretKeyRef.key` | `username` |
 | `postgres.password.secretKeyRef.name` | none; required |
 | `postgres.password.secretKeyRef.key` | `password` |
-| `resources` | requests `cpu: 100m`, `memory: 384Mi`; no limits |
+| `resources` | none |
 | `persistence.config.existingClaim` | none; the chart creates a claim |
 | `persistence.config.storageClassName` | the cluster's default class |
 | `persistence.config.size` | `2Gi` |
@@ -40,46 +34,23 @@ It runs one replica:
 | `httpRoute.parentRefs` | none; required when enabled |
 | `httpRoute.hostnames` | none |
 
-### What the chart sets
+## Fixed settings
 
-These are set as environment variables, which override `config.xml`, so they can't be changed in the web UI.
+The chart sets these as environment variables, which override `config.xml`, so they can't be changed in the web UI:
 
-| Setting | Value | Why |
-| --- | --- | --- |
-| API key | from `apiKey`'s Secret | A fixed key survives `/config` being rebuilt, and anything that talks to Sonarr can be given it up front. |
-| Authentication method | `Forms` | A login page with a session. |
-| Authentication required | `Enabled` | Behind a gateway or ingress every request comes from a private address, so `DisabledForLocalAddresses` would turn the login off for everyone. |
-| Postgres | from `postgres` | Sonarr's main database. |
-| Log database | off | Sonarr's log lines already go to the container's output. |
-
-The login's user and password are made in the web UI on first start.
-Everything else (root folders, quality profiles, indexers, download clients) is kept in the database and set in the web UI.
-
-### Postgres
-
-Sonarr needs one database, `postgres.database`, owned by the user in the Secret; Sonarr creates its tables in it.
-The user and password can come from one Secret or two.
-Their keys default to those of a `kubernetes.io/basic-auth` Secret, which is also how CloudNativePG names them.
-
-### User and group
-
-LinuxServer's image starts as root, gives `/config` to `puid` and `pgid`, then runs Sonarr as them.
-They need to be able to write to `/data` as well.
-
-### Storage
-
-`/data` holds the library and the download folders together, as the [Servarr wiki](https://wiki.servarr.com/docker-guide) recommends.
-An import is then a hardlink or a rename rather than a copy, which only works when both are on one filesystem.
-Point Sonarr's root folder and the download client's folder at paths under `/data`.
-
-A claim the chart creates is `ReadWriteOnce`.
-To share `/data` with a download client, give an existing claim that both mount.
+- The API key, from `apiKey`'s Secret.
+- The authentication method, `Forms`.
+- Authentication required, `Enabled`.
+  Behind a gateway or ingress every request comes from a private address, so `DisabledForLocalAddresses` would turn the login off for everyone.
+- The Postgres connection, from `postgres`.
 
 ## Requirements
 
-- A Postgres server, with the database and user made beforehand.
+- A Postgres server, with the main and log databases and the user that owns them made beforehand.
 - A Secret holding the API key, and one or two holding the Postgres user and password.
 - A storage class for the claims the chart creates, the cluster's default unless named.
+  A claim the chart creates is `ReadWriteOnce`, so sharing `/data` with a download client needs an existing claim.
+  The [Servarr wiki](https://wiki.servarr.com/docker-guide) covers how to lay out `/data`.
 - The Gateway API's `HTTPRoute` CRD, when `httpRoute.enabled` is set.
 
 ## Usage

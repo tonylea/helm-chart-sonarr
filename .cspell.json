@@ -13,12 +13,11 @@
   ],
   "words": [
     "APIKEY",
-    "DBENABLED",
-    "hardlink",
     "hardlinks",
     "httproute",
     "isready",
     "kubeconform",
+    "LOGDB",
     "lscr",
     "MAINDB",
     "nindent",
