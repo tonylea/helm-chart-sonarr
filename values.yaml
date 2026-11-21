@@ -14,7 +14,9 @@ apiKey:
 postgres:
   host: ""
   port: 5432
-  database: sonarr-main
+  databases:
+    main: sonarr-main
+    log: sonarr-log
   username:
     secretKeyRef:
       name: ""
