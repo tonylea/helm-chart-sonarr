@@ -11,4 +11,7 @@ postgres:
       name: postgres
 persistence:
   data:
-    size: 1Gi
+    - name: downloads
+      size: 1Gi
+    - name: tv
+      size: 1Gi
