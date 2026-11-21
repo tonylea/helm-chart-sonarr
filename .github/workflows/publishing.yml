@@ -1,0 +1,19 @@
+name: Publishing
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The released tag to publish again, such as v2.0.0.
+        required: true
+        type: string
+
+jobs:
+  publish:
+    uses: tonylea/ci-templates/.github/workflows/versioning-helm.yml@v1.3.2
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    with:
+      version: ${{ inputs.version }}
