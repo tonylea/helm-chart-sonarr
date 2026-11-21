@@ -26,6 +26,7 @@ secretKeyRef:
 
 {{- define "sonarr.claimName" -}}
 {{- $root := index . 0 }}
-{{- $name := index . 1 }}
-{{- (index $root.Values.persistence $name).existingClaim | default (printf "%s-%s" $root.Release.Name $name) }}
+{{- $volume := index . 1 }}
+{{- $suffix := index . 2 }}
+{{- $volume.existingClaim | default (printf "%s-%s" $root.Release.Name $suffix) }}
 {{- end }}

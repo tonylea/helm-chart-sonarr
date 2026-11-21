@@ -33,11 +33,7 @@ persistence:
     existingClaim: ""
     storageClassName: ""
     size: 2Gi
-  # The library and the download folders, on one filesystem so imports are hardlinks or renames.
-  data:
-    existingClaim: ""
-    storageClassName: ""
-    size: ""
+  data: []
 
 httpRoute:
   enabled: false

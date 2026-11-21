@@ -1,3 +1,11 @@
+{{- if not .Values.persistence.data }}
+{{- fail "persistence.data needs at least one mount" }}
+{{- end }}
+{{- range .Values.persistence.data }}
+{{- if not .name }}
+{{- fail "each persistence.data mount needs a name" }}
+{{- end }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -80,12 +88,16 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: data
-              mountPath: /data
+            {{- range .Values.persistence.data }}
+            - name: data-{{ .name }}
+              mountPath: /data/{{ .name }}
+            {{- end }}
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: {{ include "sonarr.claimName" (list . "config") }}
-        - name: data
+            claimName: {{ include "sonarr.claimName" (list . .Values.persistence.config "config") }}
+        {{- range .Values.persistence.data }}
+        - name: data-{{ .name }}
           persistentVolumeClaim:
-            claimName: {{ include "sonarr.claimName" (list . "data") }}
+            claimName: {{ include "sonarr.claimName" (list $ . (printf "data-%s" .name)) }}
+        {{- end }}
