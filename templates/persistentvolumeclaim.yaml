@@ -1,0 +1,21 @@
+{{- range $name := list "config" "data" }}
+{{- $volume := index $.Values.persistence $name }}
+{{- if not $volume.existingClaim }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $.Release.Name }}-{{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "sonarr.labels" $ | nindent 4 }}
+spec:
+  accessModes: [ReadWriteOnce]
+  {{- with $volume.storageClassName }}
+  storageClassName: {{ . }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ required (printf "persistence.%s.existingClaim or persistence.%s.size is required" $name $name) $volume.size }}
+{{- end }}
+{{- end }}
