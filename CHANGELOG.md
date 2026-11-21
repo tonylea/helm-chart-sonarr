@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.1](https://github.com/tonylea/helm-chart-sonarr/compare/v3.0.0...v3.0.1) (2026-11-21)
+
+### Bug Fixes
+
+* let Sonarr's first-run screen set the login ([e33602e](https://github.com/tonylea/helm-chart-sonarr/commit/e33602eb06a0dbd8d616f469f8e2e109a3771020))
+
+### Documentation
+
+* say the kind test is a fresh install ([c167d27](https://github.com/tonylea/helm-chart-sonarr/commit/c167d273bc77f811a0f7620bc51c285731d66ce8))
+
 ## [3.0.0](https://github.com/tonylea/helm-chart-sonarr/compare/v2.0.0...v3.0.0) (2026-11-21)
 
 ### ⚠ BREAKING CHANGES
