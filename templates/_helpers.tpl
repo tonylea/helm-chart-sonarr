@@ -16,7 +16,6 @@ helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
-{{/* A secretKeyRef from a value holding one; takes the value's path and the value. */}}
 {{- define "sonarr.secretKeyRef" -}}
 {{- $path := index . 0 }}
 {{- $ref := (index . 1).secretKeyRef }}
@@ -25,7 +24,6 @@ secretKeyRef:
   key: {{ required (printf "%s.secretKeyRef.key is required" $path) $ref.key }}
 {{- end }}
 
-{{/* The claim behind a volume; takes the root context and the volume's name. */}}
 {{- define "sonarr.claimName" -}}
 {{- $root := index . 0 }}
 {{- $name := index . 1 }}
