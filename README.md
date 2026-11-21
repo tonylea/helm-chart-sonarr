@@ -1,5 +1,7 @@
 # Sonarr Helm Chart
 
+![Downloads](https://img.shields.io/github/downloads/tonylea/helm-chart-sonarr/total)
+
 Deploys [Sonarr](https://sonarr.tv/) from LinuxServer's image, [`lscr.io/linuxserver/sonarr`](https://github.com/linuxserver/docker-sonarr), the one Sonarr's docs recommend.
 
 The chart is opinionated: Sonarr keeps its data in Postgres, uses a fixed API key, and always asks for a login.
