@@ -162,7 +162,16 @@ tests:
           path: spec.template.spec.containers[0].readinessProbe.httpGet.path
           value: /ping
 
-  - it: requests CPU and memory, with no limits
+  - it: leaves resources to whoever deploys it
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources
+          value: {}
+
+  - it: uses the resources when set
+    set:
+      resources.requests.cpu: 100m
+      resources.requests.memory: 384Mi
     asserts:
       - equal:
           path: spec.template.spec.containers[0].resources

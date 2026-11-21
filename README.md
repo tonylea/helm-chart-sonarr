@@ -29,7 +29,7 @@ It runs one replica:
 | `postgres.username.secretKeyRef.key` | `username` |
 | `postgres.password.secretKeyRef.name` | none; required |
 | `postgres.password.secretKeyRef.key` | `password` |
-| `resources` | requests `cpu: 100m`, `memory: 384Mi`; no limits |
+| `resources` | none |
 | `persistence.config.existingClaim` | none; the chart creates a claim |
 | `persistence.config.storageClassName` | the cluster's default class |
 | `persistence.config.size` | `2Gi` |
