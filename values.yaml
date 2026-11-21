@@ -1,0 +1,55 @@
+image:
+  # Empty uses the chart's appVersion.
+  tag: ""
+
+# The image starts as root, gives /config to this user and group, then runs Sonarr as them.
+puid: 1000
+pgid: 1000
+
+timezone: UTC
+
+# A fixed API key, so it survives /config being rebuilt.
+apiKey:
+  secretKeyRef:
+    name: ""
+    key: api-key
+
+# Sonarr's main database. Its log database is turned off, so only one database is needed.
+# The keys default to those of a kubernetes.io/basic-auth Secret.
+postgres:
+  host: ""
+  port: 5432
+  database: sonarr-main
+  username:
+    secretKeyRef:
+      name: ""
+      key: username
+  password:
+    secretKeyRef:
+      name: ""
+      key: password
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 384Mi
+
+# Each is an existing claim, or else a ReadWriteOnce claim the chart creates.
+# An empty storageClassName uses the cluster's default class.
+persistence:
+  # Sonarr's config.xml, logs, backups and artwork cache (about 3 MB per series).
+  config:
+    existingClaim: ""
+    storageClassName: ""
+    size: 2Gi
+  # The TV library and the download folders, on one filesystem so imports are hardlinks or renames.
+  data:
+    existingClaim: ""
+    storageClassName: ""
+    size: ""
+
+# A Gateway API HTTPRoute to the web UI.
+httpRoute:
+  enabled: false
+  parentRefs: []
+  hostnames: []

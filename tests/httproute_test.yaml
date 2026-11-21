@@ -1,0 +1,37 @@
+suite: HTTPRoute
+release:
+  name: sonarr
+templates:
+  - templates/httproute.yaml
+tests:
+  - it: is off by default
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: routes the hostnames to Sonarr's Service
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: gateway
+          namespace: gateway-system
+      httpRoute.hostnames: [sonarr.example.com]
+    asserts:
+      - equal:
+          path: spec
+          value:
+            parentRefs:
+              - name: gateway
+                namespace: gateway-system
+            hostnames: [sonarr.example.com]
+            rules:
+              - backendRefs:
+                  - name: sonarr
+                    port: 8989
+
+  - it: fails without a parent
+    set:
+      httpRoute.enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: httpRoute.parentRefs is required when httpRoute is enabled

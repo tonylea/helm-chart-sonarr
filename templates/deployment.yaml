@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "sonarr.labels" . | nindent 4 }}
+spec:
+  # Two copies of Sonarr can't share one database, so the old pod stops before the new one starts.
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "sonarr.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "sonarr.podLabels" . | nindent 8 }}
+    spec:
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      # No runAsUser: the image starts as root to chown /config, then drops to PUID and PGID.
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: sonarr
+          image: "lscr.io/linuxserver/sonarr:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          env:
+            - name: PUID
+              value: {{ .Values.puid | quote }}
+            - name: PGID
+              value: {{ .Values.pgid | quote }}
+            - name: TZ
+              value: {{ .Values.timezone | quote }}
+            - name: SONARR__AUTH__APIKEY
+              valueFrom:
+                {{- include "sonarr.secretKeyRef" (list "apiKey" .Values.apiKey) | nindent 16 }}
+            - name: SONARR__AUTH__METHOD
+              value: Forms
+            # Behind a gateway or ingress every request comes from a private address,
+            # so DisabledForLocalAddresses would turn the login off for everyone.
+            - name: SONARR__AUTH__REQUIRED
+              value: Enabled
+            - name: SONARR__POSTGRES__HOST
+              value: {{ required "postgres.host is required" .Values.postgres.host | quote }}
+            - name: SONARR__POSTGRES__PORT
+              value: {{ .Values.postgres.port | quote }}
+            - name: SONARR__POSTGRES__MAINDB
+              value: {{ .Values.postgres.database | quote }}
+            - name: SONARR__POSTGRES__USER
+              valueFrom:
+                {{- include "sonarr.secretKeyRef" (list "postgres.username" .Values.postgres.username) | nindent 16 }}
+            - name: SONARR__POSTGRES__PASSWORD
+              valueFrom:
+                {{- include "sonarr.secretKeyRef" (list "postgres.password" .Values.postgres.password) | nindent 16 }}
+            # Log lines already go to stdout; a log database would only duplicate them.
+            - name: SONARR__LOG__DBENABLED
+              value: "false"
+          ports:
+            - name: http
+              containerPort: 8989
+          # The first start creates Sonarr's schema in Postgres, so start-up gets 5 minutes.
+          startupProbe:
+            httpGet:
+              path: /ping
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ include "sonarr.claimName" (list . "config") }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "sonarr.claimName" (list . "data") }}
