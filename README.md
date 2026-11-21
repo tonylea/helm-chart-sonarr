@@ -50,6 +50,7 @@ The chart sets these as environment variables, which override `config.xml`, so t
 - A Secret holding the API key, and one or two holding the Postgres user and password.
 - A storage class for the claims the chart creates, the cluster's default unless named.
   A claim the chart creates is `ReadWriteOnce`, so sharing `/data` with a download client needs an existing claim.
+  The [Servarr wiki](https://wiki.servarr.com/docker-guide) covers how to lay out `/data`.
 - The Gateway API's `HTTPRoute` CRD, when `httpRoute.enabled` is set.
 
 ## Usage
