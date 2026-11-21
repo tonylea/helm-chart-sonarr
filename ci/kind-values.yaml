@@ -1,0 +1,14 @@
+apiKey:
+  secretKeyRef:
+    name: sonarr-api-key
+postgres:
+  host: postgres
+  username:
+    secretKeyRef:
+      name: postgres
+  password:
+    secretKeyRef:
+      name: postgres
+persistence:
+  data:
+    size: 1Gi

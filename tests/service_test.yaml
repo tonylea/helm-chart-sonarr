@@ -1,0 +1,19 @@
+suite: Service
+release:
+  name: sonarr
+templates:
+  - templates/service.yaml
+tests:
+  - it: exposes Sonarr's port to the pod's selector labels
+    asserts:
+      - equal:
+          path: spec.selector
+          value:
+            app.kubernetes.io/name: sonarr
+            app.kubernetes.io/instance: sonarr
+      - equal:
+          path: spec.ports
+          value:
+            - name: http
+              port: 8989
+              targetPort: http
