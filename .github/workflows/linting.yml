@@ -5,15 +5,15 @@ on:
 
 jobs:
   changes:
-    uses: tonylea/ci-templates/.github/workflows/changes-helm-chart.yml@v1.3.2
+    uses: tonylea/ci-templates/.github/workflows/changes-helm-chart.yml@v1.3.3
 
   common:
-    uses: tonylea/ci-templates/.github/workflows/linting-common.yml@v1.3.2
+    uses: tonylea/ci-templates/.github/workflows/linting-common.yml@v1.3.3
 
   helm:
     needs: [changes]
     if: needs.changes.outputs.chart == 'true'
-    uses: tonylea/ci-templates/.github/workflows/linting-helm.yml@v1.3.2
+    uses: tonylea/ci-templates/.github/workflows/linting-helm.yml@v1.3.3
 
   # The required check: skipped jobs pass, failed or cancelled ones don't.
   linting:
