@@ -74,8 +74,6 @@ tests:
                 secretKeyRef:
                   name: sonarr-api-key
                   key: api-key
-            - name: SONARR__AUTH__METHOD
-              value: Forms
             - name: SONARR__AUTH__REQUIRED
               value: Enabled
             - name: SONARR__POSTGRES__HOST
