@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.0](https://github.com/tonylea/helm-chart-sonarr/compare/v3.0.1...v3.1.0) (2026-11-26)
+
+### Features
+
+* make the liveness and readiness probe timeouts configurable ([0177c79](https://github.com/tonylea/helm-chart-sonarr/commit/0177c79a0799f45cd2d2b1287a19833b1ff845b8))
+
 ## [3.0.1](https://github.com/tonylea/helm-chart-sonarr/compare/v3.0.0...v3.0.1) (2026-11-21)
 
 ### Bug Fixes
