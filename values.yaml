@@ -28,6 +28,12 @@ postgres:
 
 resources: {}
 
+probes:
+  liveness:
+    timeoutSeconds: 1
+  readiness:
+    timeoutSeconds: 1
+
 persistence:
   config:
     existingClaim: ""
