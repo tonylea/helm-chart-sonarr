@@ -26,6 +26,8 @@ It runs one replica, and stops the old pod before starting the new one, since tw
 | `postgres.password.secretKeyRef.name` | none; required |
 | `postgres.password.secretKeyRef.key` | `password` |
 | `resources` | none |
+| `probes.liveness.timeoutSeconds` | `1` |
+| `probes.readiness.timeoutSeconds` | `1` |
 | `persistence.config.existingClaim` | none; the chart creates a claim |
 | `persistence.config.storageClassName` | the cluster's default class |
 | `persistence.config.size` | `2Gi` |
